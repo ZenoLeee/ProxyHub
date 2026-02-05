@@ -1,0 +1,1395 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设置 - ProxyHub</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            margin: 0;
+        }
+
+        .settings-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            width: 100%;
+            max-width: 1000px;
+            height: 800px;
+            display: flex;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* 侧边栏 */
+        .sidebar {
+            width: 220px;
+            background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
+            padding: 24px 0;
+            flex-shrink: 0;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-title {
+            color: white;
+            font-size: 20px;
+            font-weight: 600;
+            padding: 0 24px;
+            margin-bottom: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .menu-item {
+            padding: 16px 24px;
+            color: rgba(255, 255, 255, 0.8);
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 15px;
+            border-left: 3px solid transparent;
+        }
+
+        .menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border-left-color: white;
+            font-weight: 500;
+        }
+
+        .menu-icon {
+            font-size: 18px;
+        }
+
+        /* 内容区 */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .content-header {
+            padding: 24px 32px;
+            border-bottom: 1px solid #e0e0e0;
+            background: #fafafa;
+            flex-shrink: 0;
+        }
+
+        .content-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px 32px;
+        }
+
+        /* 内容面板 */
+        .panel {
+            display: none;
+        }
+
+        .panel.active {
+            display: block;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* 输入组 */
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .input-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            background: #fafafa;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .input-hint {
+            font-size: 12px;
+            color: #999;
+            margin-top: 6px;
+        }
+
+        /* 开关组 */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 16px;
+            background: #fafafa;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            transition: all 0.2s;
+            margin-bottom: 12px;
+        }
+
+        .toggle-group:hover {
+            border-color: #667eea;
+            background: white;
+        }
+
+        .toggle-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: #555;
+        }
+
+        /* 开关按钮 */
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: #ccc;
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            width: 22px;
+            height: 22px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .toggle-switch.active::after {
+            transform: translateX(22px);
+        }
+
+        /* 按钮 */
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: #667eea;
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-danger {
+            background: #ff4757;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background: #ee5a6f;
+        }
+
+        .btn-block {
+            width: 100%;
+        }
+
+        /* 按钮组 */
+        .button-group {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .button-group .btn {
+            flex: 1;
+        }
+
+        /* 订阅列表 */
+        .subscription-list {
+            max-height: 250px;
+            overflow-y: auto;
+            margin-bottom: 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .subscription-item {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 12px;
+            transition: all 0.2s;
+        }
+
+        .subscription-item:hover {
+            background: #e9ecef;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .subscription-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .subscription-name {
+            font-weight: 600;
+            color: #333;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .health-dot {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .health-dot.healthy { background: #2ecc71; }
+        .health-dot.expired { background: #f39c12; }
+        .health-dot.down { background: #e74c3c; }
+        .health-dot.error { background: #95a5a6; }
+
+        .subscription-traffic {
+            font-size: 11px;
+            color: #667eea;
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 6px;
+        }
+
+        .subscription-url {
+            font-size: 11px;
+            color: #666;
+            word-break: break-all;
+            padding: 6px 8px;
+            background: white;
+            border-radius: 4px;
+            font-family: 'Courier New', monospace;
+            line-height: 1.4;
+        }
+
+        .subscription-url.blurred {
+            filter: blur(3px);
+            user-select: none;
+        }
+
+        .subscription-actions {
+            display: flex;
+            gap: 6px;
+            margin-top: 8px;
+        }
+
+        .btn-view-url {
+            background: none;
+            border: none;
+            padding: 4px 8px;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.6;
+            transition: all 0.2s;
+        }
+
+        .btn-view-url:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+
+        .btn-delete-sub {
+            background: #ff4757;
+            color: white;
+            border: none;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-delete-sub:hover {
+            background: #ee5a6f;
+        }
+
+        .empty-subscriptions {
+            text-align: center;
+            padding: 20px;
+            color: #999;
+            font-size: 12px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            border: 1px dashed #ddd;
+        }
+
+        /* 信息框 */
+        .info-box {
+            background: #e7f3ff;
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .warning-box {
+            background: #fff3cd;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #856404;
+            text-align: center;
+        }
+
+        /* 底部 */
+        .content-footer {
+            padding: 16px 32px;
+            border-top: 1px solid #e0e0e0;
+            background: #fafafa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        /* 对话框 */
+        .dialog {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            animation: fadeIn 0.2s ease-out;
+        }
+
+        .dialog-content {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 360px;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .dialog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 20px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .dialog-header h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .close-btn:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .dialog-body {
+            padding: 20px;
+        }
+
+        .dialog-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 16px;
+        }
+
+        .dialog-actions button {
+            flex: 1;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 同步徽章 */
+        .sync-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 8px;
+        }
+
+        /* 滚动条样式 */
+        .sidebar::-webkit-scrollbar,
+        .content-body::-webkit-scrollbar,
+        .subscription-list::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track,
+        .content-body::-webkit-scrollbar-track,
+        .subscription-list::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb,
+        .content-body::-webkit-scrollbar-thumb,
+        .subscription-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+        }
+
+        .content-body::-webkit-scrollbar-thumb {
+            background: #ccc;
+        }
+
+        /* 隐藏文件输入 */
+        #importFileInput {
+            display: none;
+        }
+
+        /* 隐藏所有 checkbox */
+        input[type="checkbox"] {
+            display: none;
+        }
+
+        /* 分隔线 */
+        .divider {
+            height: 1px;
+            background: #e0e0e0;
+            margin: 16px 0;
+        }
+
+        /* 小标题 */
+        .sub-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #667eea;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* 自定义弹窗 */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 20000;
+            display: none;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-content {
+            position: relative;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 480px;
+            width: 90%;
+            margin: 40px auto;
+            animation: modalSlideIn 0.3s ease-out;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes modalSlideOut {
+            from {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: scale(0.95) translateY(-20px);
+            }
+        }
+
+        .modal.closing .modal-content {
+            animation: modalSlideOut 0.2s ease-out forwards;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 24px 24px 16px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333;
+            margin: 0;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 28px;
+            color: #999;
+            cursor: pointer;
+            padding: 0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .modal-close:hover {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 24px;
+            max-height: 400px;
+            overflow-y: auto;
+            line-height: 1.6;
+            color: #555;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .modal-info {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 0;
+            margin-bottom: 16px;
+        }
+
+        .modal-info-icon {
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .modal-info-text {
+            flex: 0 0 auto;
+        }
+
+        .modal-info-text strong {
+            display: inline;
+            color: #333;
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .modal-option {
+            display: flex;
+            align-items: center;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .modal-option:hover {
+            background: white;
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .modal-option.selected {
+            background: white;
+            border-color: #667eea;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.2);
+        }
+
+        .modal-option-icon {
+            font-size: 28px;
+            margin-right: 16px;
+        }
+
+        .modal-option-content {
+            flex: 1;
+        }
+
+        .modal-option-title {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .modal-option-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .modal-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: all 0.2s;
+            margin-top: 8px;
+        }
+
+        .modal-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .modal-btn {
+            padding: 10px 24px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .modal-btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .modal-btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .modal-btn-secondary {
+            background: #e0e0e0;
+            color: #666;
+        }
+
+        .modal-btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        /* 同步状态框 */
+        .sync-status-box {
+            margin-top: 20px;
+            padding: 16px;
+            border-radius: 8px;
+        }
+
+        .sync-status-title {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .sync-status-text {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* 深色模式 */
+        body.dark-mode {
+            background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+        }
+
+        body.dark-mode .settings-container {
+            background: #2d3748;
+        }
+
+        body.dark-mode .sidebar {
+            background: linear-gradient(180deg, #4a5568 0%, #2d3748 100%);
+        }
+
+        body.dark-mode .menu-item {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        body.dark-mode .menu-item:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        body.dark-mode .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+
+        body.dark-mode .content-header {
+            background: #2d3748;
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .content-title {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .input-label {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .input-field {
+            background: #4a5568;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .input-field:focus {
+            background: #2d3748;
+            border-color: #667eea;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .input-hint {
+            color: #718096;
+        }
+
+        body.dark-mode .toggle-group {
+            background: #4a5568;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .toggle-group:hover {
+            background: #2d3748;
+            border-color: #667eea;
+        }
+
+        body.dark-mode .toggle-label {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .info-box {
+            background: #2d3748;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .warning-box {
+            background: rgba(229, 62, 62, 0.1);
+            border-color: #e53e3e;
+            color: #fc8181;
+        }
+
+        body.dark-mode .divider {
+            background: #4a5568;
+        }
+
+        body.dark-mode .sub-title {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .btn {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .btn:hover {
+            background: #2d3748;
+        }
+
+        body.dark-mode .btn-secondary {
+            background: #718096;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .btn-secondary:hover {
+            background: #4a5568;
+        }
+
+        body.dark-mode .btn-danger {
+            background: #c53030;
+            color: white;
+        }
+
+        body.dark-mode .btn-danger:hover {
+            background: #9b2c2c;
+        }
+
+        body.dark-mode .modal-content {
+            background: #2d3748;
+        }
+
+        body.dark-mode .modal-header {
+            border-bottom-color: #4a5568;
+        }
+
+        body.dark-mode .modal-header h3 {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-close {
+            color: #a0aec0;
+        }
+
+        body.dark-mode .modal-close:hover {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-input {
+            background: #4a5568;
+            border-color: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-input:focus {
+            background: #2d3748;
+            border-color: #667eea;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-info {
+            background: #2d3748;
+        }
+
+        body.dark-mode .modal-info-text strong {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-info-text {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .modal-option {
+            background: #2d3748;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .modal-option:hover {
+            background: #374151;
+            border-color: #667eea;
+        }
+
+        body.dark-mode .modal-option-title {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-option-desc {
+            color: #a0aec0;
+        }
+
+        body.dark-mode .modal-option.selected {
+            background: #374151;
+            border-color: #667eea;
+        }
+
+        body.dark-mode #panel-sponsor p {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode #panel-sponsor p[style*="color: #666"] {
+            color: #cbd5e0 !important;
+        }
+
+        body.dark-mode #panel-sponsor p[style*="color: #999"] {
+            color: #718096 !important;
+        }
+
+        body.dark-mode #syncStatus {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .sync-status-title {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .sync-status-text {
+            color: #e2e8f0;
+        }
+
+        /* 订阅列表深色模式 */
+        body.dark-mode .subscription-item {
+            background: #4a5568;
+        }
+
+        body.dark-mode .subscription-item:hover {
+            background: #374151;
+        }
+
+        body.dark-mode .subscription-name {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .subscription-url {
+            background: #2d3748;
+            color: #cbd5e0;
+            border-color: #4a5568;
+        }
+
+        body.dark-mode .subscription-traffic {
+            color: #90cdf4;
+        }
+
+        body.dark-mode .empty-subscriptions {
+            background: #4a5568;
+            color: #a0aec0;
+            border-color: #718096;
+        }
+
+        body.dark-mode .subscription-traffic .used,
+        body.dark-mode .subscription-traffic .remaining {
+            color: #a0aec0;
+        }
+
+        body.dark-mode #subscriptionCount {
+            color: #a0aec0;
+        }
+
+        body.dark-mode .content-footer {
+            background: #2d3748;
+            border-top-color: #4a5568;
+        }
+
+        body.dark-mode .modal-close {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-close:hover {
+            color: white;
+        }
+
+        body.dark-mode .modal-btn-secondary {
+            background: #4a5568;
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .modal-btn-secondary:hover {
+            background: #2d3748;
+        }
+
+        .modal-hint-text {
+            margin-bottom: 16px;
+            color: #666;
+        }
+
+        body.dark-mode .modal-hint-text {
+            color: #cbd5e0;
+        }
+
+        body.dark-mode .info-box {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .info-box strong {
+            color: #e2e8f0;
+        }
+
+        body.dark-mode .info-box div[style*="line-height"] span:last-child {
+            color: #cbd5e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <!-- 侧边栏 -->
+        <div class="sidebar">
+            <div class="sidebar-title">
+                <span>⚙️</span>
+                <span data-i18n="settings">设置</span>
+            </div>
+            <ul class="sidebar-menu">
+                <li class="menu-item active" data-panel="api">
+                    <span class="menu-icon">🔌</span>
+                    <span data-i18n="apiConfig">API 配置</span>
+                </li>
+                <li class="menu-item" data-panel="display">
+                    <span class="menu-icon">🎨</span>
+                    <span data-i18n="settings">显示</span>
+                </li>
+                <li class="menu-item" data-panel="nodes">
+                    <span class="menu-icon">📡</span>
+                    <span data-i18n="nodes">节点</span>
+                </li>
+                <li class="menu-item" data-panel="data">
+                    <span class="menu-icon">💾</span>
+                    <span data-i18n="dataManagement">数据</span>
+                </li>
+                <li class="menu-item" data-panel="sponsor">
+                    <span class="menu-icon">❤️</span>
+                    <span data-i18n="sponsor">赞助</span>
+                </li>
+            </ul>
+        </div>
+
+        <!-- 内容区 -->
+        <div class="content-area">
+            <div class="content-header">
+                <div class="content-title" id="contentTitle">
+                    <span>🔌</span>
+                    <span>API 配置</span>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <!-- API 配置面板 -->
+                <div class="panel active" id="panel-api">
+                    <div class="input-group">
+                        <label class="input-label" for="apiUrl">Clash API 地址</label>
+                        <input type="text" id="apiUrl" class="input-field" placeholder="127.0.0.1:9999">
+                        <div class="input-hint">IP:端口，例如 127.0.0.1:9999</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="apiSecret">密钥 (Secret)</label>
+                        <input type="password" id="apiSecret" class="input-field" placeholder="set-your-secret">
+                        <div class="input-hint">Clash API 认证密钥（可选）</div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="sub-title">订阅管理 <span id="subscriptionCount" style="font-size: 12px; font-weight: normal; color: #666;"></span></div>
+                    <div class="subscription-list" id="subscriptionList">
+                        <div class="empty-subscriptions">暂无订阅，请添加</div>
+                    </div>
+                    <button id="addSubscriptionBtn" class="btn btn-block">+ 添加订阅</button>
+                </div>
+
+                <!-- 显示面板 -->
+                <div class="panel" id="panel-display">
+                    <div class="input-group">
+                        <label class="input-label" for="languageSelect">语言 / Language</label>
+                        <select id="languageSelect" class="input-field">
+                            <option value="zh_CN">简体中文</option>
+                            <option value="zh_TW">繁體中文</option>
+                            <option value="en">English</option>
+                        </select>
+                    </div>
+
+                    <div class="toggle-group" id="toggleNodeType">
+                        <span class="toggle-label">显示节点类型</span>
+                        <div class="toggle-switch" id="nodeTypeSwitch">
+                            <input type="checkbox" id="showNodeType">
+                        </div>
+                    </div>
+
+                    <div class="toggle-group" id="toggleDualColumn">
+                        <span class="toggle-label">启用双列显示</span>
+                        <div class="toggle-switch" id="dualColumnSwitch">
+                            <input type="checkbox" id="dualColumn">
+                        </div>
+                    </div>
+
+                    <div class="toggle-group" id="toggleDarkMode">
+                        <span class="toggle-label">深色模式</span>
+                        <div class="toggle-switch" id="darkModeSwitch">
+                            <input type="checkbox" id="darkMode">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 节点管理面板 -->
+                <div class="panel" id="panel-nodes">
+                    <div class="toggle-group" id="toggleAutoDelete">
+                        <span class="toggle-label">自动删除无效配置</span>
+                        <div class="toggle-switch" id="autoDeleteSwitch">
+                            <input type="checkbox" id="autoDelete">
+                        </div>
+                    </div>
+
+                    <div class="toggle-group" id="toggleAutoSort">
+                        <span class="toggle-label">自动按延迟排序</span>
+                        <div class="toggle-switch" id="autoSortSwitch">
+                            <input type="checkbox" id="autoSort">
+                        </div>
+                    </div>
+
+                    <div class="toggle-group" id="toggleSmartConnect">
+                        <span class="toggle-label">智能连接</span>
+                        <div class="toggle-switch" id="smartConnectSwitch">
+                            <input type="checkbox" id="smartConnect">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="smartConnectKeywords">智能连接关键词（可选）</label>
+                        <input type="text" id="smartConnectKeywords" class="input-field" placeholder="例如: 香港, HK, Hong Kong">
+                        <div class="input-hint">只在这些关键词的节点中选择最快的。留空则从所有节点中选择</div>
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <div class="sub-title">高级设置</div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="testConcurrency">并发测试数量</label>
+                        <input type="number" id="testConcurrency" class="input-field" min="1" max="50" value="10">
+                        <div class="input-hint">同时测试的节点数量。建议 5-20</div>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label" for="testUrl">测速目标地址</label>
+                        <input type="text" id="testUrl" class="input-field" placeholder="http://www.gstatic.com/generate_204">
+                        <div class="input-hint">用于测试节点延迟的目标地址。留空使用默认值</div>
+                    </div>
+                </div>
+
+                <!-- 数据管理面板 -->
+                <div class="panel" id="panel-data">
+                    <div class="info-box" id="syncInfoBox">
+                        <!-- 动态生成 -->
+                    </div>
+
+                    <!-- 同步状态 -->
+                    <div class="sync-status-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                            <span class="sync-status-title" data-i18n="cloudSyncStatus">云同步状态</span>
+                            <button id="btnSyncNow" class="btn" style="padding: 6px 16px; font-size: 13px;" data-i18n="syncNow">
+                                🔄 立即同步
+                            </button>
+                        </div>
+                        <div id="syncStatus" class="sync-status-text">
+                            <span id="syncStatusText">检查中...</span>
+                            <span id="syncTime" style="margin-left: 8px;"></span>
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button id="btnExport" class="btn">📤 导出</button>
+                        <button id="btnImport" class="btn btn-secondary">📥 导入</button>
+                    </div>
+
+                    <div class="warning-box">
+                        ⚠️ 导出的文件包含您的订阅密钥和 API 密钥，请妥善保管
+                    </div>
+
+                    <div class="divider"></div>
+
+                    <button id="btnClearData" class="btn btn-danger btn-block">🗑️ 彻底重置所有数据</button>
+
+                    <input type="file" id="importFileInput" accept=".json">
+                </div>
+
+                <!-- 赞助面板 -->
+                <div class="panel" id="panel-sponsor">
+                    <div style="text-align: center; padding: 20px;">
+                        <h2 style="color: #333; margin-bottom: 10px;" data-i18n="sponsorTitle">感谢您的支持！</h2>
+                        <p style="color: #666; margin-bottom: 30px;" data-i18n="sponsorDesc">如果您觉得这个工具对您有帮助，欢迎请我喝杯咖啡☕</p>
+
+                        <div style="display: flex; justify-content: center; gap: 40px; flex-wrap: wrap;">
+                            <div style="text-align: center;">
+                                <img src="https://raw.githubusercontent.com/ZenoLeee/zeno/main/images/sponsor/alipay.jpg"
+                                     alt="Alipay"
+                                     style="width: 200px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 12px; color: #666; font-weight: 500;" data-i18n="alipay">支付宝</p>
+                            </div>
+
+                            <div style="text-align: center;">
+                                <img src="https://raw.githubusercontent.com/ZenoLeee/zeno/main/images/sponsor/wechat.jpg"
+                                     alt="WeChat Pay"
+                                     style="width: 200px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                                <p style="margin-top: 12px; color: #666; font-weight: 500;" data-i18n="wechat">微信支付</p>
+                            </div>
+                        </div>
+
+                        <p style="color: #999; font-size: 14px; margin-top: 40px;" data-i18n="scanToDonate">扫描二维码即可赞助</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-footer">
+                <button id="btnCancel" class="btn btn-secondary">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 订阅编辑对话框 -->
+    <div id="subscriptionDialog" class="dialog" style="display: none;">
+        <div class="dialog-content">
+            <div class="dialog-header">
+                <h3>添加订阅</h3>
+                <button id="closeDialogBtn" class="close-btn">&times;</button>
+            </div>
+            <div class="dialog-body">
+                <div class="input-group">
+                    <label class="input-label" for="subName">订阅名称</label>
+                    <input type="text" id="subName" class="input-field" placeholder="例如：香港机场">
+                </div>
+                <div class="input-group">
+                    <label class="input-label" for="subUrl">订阅链接</label>
+                    <input type="text" id="subUrl" class="input-field" placeholder="https://xxx.com/sub?token=xxx">
+                </div>
+                <div class="dialog-actions">
+                    <button id="cancelSubBtn" class="btn btn-secondary">取消</button>
+                    <button id="saveSubBtn" class="btn">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 自定义弹窗 -->
+    <div id="customModal" class="modal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modalTitle">提示</h3>
+                <button id="modalClose" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- 动态内容 -->
+            </div>
+            <div class="modal-footer" id="modalFooter">
+                <!-- 动态按钮 -->
+            </div>
+        </div>
+    </div>
+
+    <script src="js/settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProxyHub</title>
+    <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 头部 -->
+        <div class="header">
+            <div class="header-left">
+                <h1>ProxyHub</h1>
+                <div class="traffic-info" id="trafficInfo"></div>
+            </div>
+            <div class="header-right">
+                <select id="modeSelect" class="mode-select">
+                    <option value="Global" data-i18n="global">全局</option>
+                    <option value="Rule" data-i18n="rule">规则</option>
+                    <option value="Direct" data-i18n="direct">直连</option>
+                </select>
+                <div class="status" id="status">
+                    <span class="status-dot"></span>
+                </div>
+                <button id="toggleDarkMode" class="icon-btn" title="深色模式">🌙</button>
+                <button id="openSettings" class="icon-btn" title="设置">⚙️</button>
+            </div>
+        </div>
+
+        <!-- 节点管理 -->
+        <div class="section">
+            <h2 data-i18n="nodeManagement">节点管理</h2>
+            <div class="button-group">
+                <button id="updateNodes" data-i18n="updateNodes">加载订阅</button>
+                <button id="testAllDelays" data-i18n="testAll">测试延迟</button>
+            </div>
+            <p class="hint">💡 <span data-i18n="hint">订阅更新后请点击"加载订阅"刷新节点</span></p>
+        </div>
+
+        <!-- 节点列表 -->
+        <div class="section">
+            <h2>
+                <span data-i18n="nodeList">节点列表</span>
+                <span class="node-count" id="nodeCount">(0)</span>
+            </h2>
+            <div class="search-box">
+                <input type="text" id="searchNode" data-i18n-placeholder="searchNode" placeholder="搜索节点...">
+            </div>
+            <div class="node-list" id="nodeList">
+                <div class="empty-state" data-i18n="noNodes">暂无节点，请添加订阅</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/popup.js"></script>
+</body>
+</html>

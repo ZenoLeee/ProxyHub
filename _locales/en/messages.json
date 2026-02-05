@@ -1,0 +1,538 @@
+{
+  "extensionName": {
+    "message": "ProxyHub - Node Manager",
+    "description": "Efficient node management tool with one-click speed test, smart switching, favorites, and more"
+  },
+  "extensionDescription": {
+    "message": "Efficient node management tool with one-click speed test, smart switching, favorites, and more"
+  },
+  "appName": {
+    "message": "ProxyHub"
+  },
+  "popup": {
+    "message": "Update Nodes",
+    "description": "Update nodes button text"
+  },
+  "updateNodes": {
+    "message": "Load Subscription"
+  },
+  "testAll": {
+    "message": "Test Latency"
+  },
+  "stopTest": {
+    "message": "Stop Test"
+  },
+  "settings": {
+    "message": "Settings"
+  },
+  "darkMode": {
+    "message": "Dark Mode"
+  },
+  "lightMode": {
+    "message": "Light Mode"
+  },
+  "testing": {
+    "message": "Testing"
+  },
+  "untested": {
+    "message": "Untested"
+  },
+  "current": {
+    "message": "Current"
+  },
+  "favorite": {
+    "message": "Favorite"
+  },
+  "unfavorite": {
+    "message": "Unfavorite"
+  },
+  "test": {
+    "message": "Test"
+  },
+  "available": {
+    "message": "Available"
+  },
+  "unavailable": {
+    "message": "Unavailable"
+  },
+  "used": {
+    "message": "Used"
+  },
+  "remaining": {
+    "message": "Remaining"
+  },
+  "total": {
+    "message": "Total"
+  },
+  "expire": {
+    "message": "Expires"
+  },
+  "title": {
+    "message": "Settings"
+  },
+  "apiConfig": {
+    "message": "API Config"
+  },
+  "apiUrl": {
+    "message": "Clash API URL"
+  },
+  "apiSecret": {
+    "message": "Secret"
+  },
+  "smartConnect": {
+    "message": "Smart Connect"
+  },
+  "smartConnectKeywords": {
+    "message": "Smart Connect Keywords (Optional)"
+  },
+  "smartConnectHint": {
+    "message": "Select fastest from nodes matching these keywords. Separate with commas. Leave empty to select from all nodes"
+  },
+  "smartConnectKeywordsHint": {
+    "message": "Select fastest from nodes matching these keywords. Leave empty to select from all nodes"
+  },
+  "autoSort": {
+    "message": "Auto Sort"
+  },
+  "testConcurrency": {
+    "message": "Concurrent Tests"
+  },
+  "testConcurrencyHint": {
+    "message": "Number of nodes to test simultaneously. Recommended: 5-20. Too high may cause failures"
+  },
+  "testUrl": {
+    "message": "Test Target URL"
+  },
+  "testUrlHint": {
+    "message": "Target URL for latency testing. Must return HTTP 204 (No Content). Leave empty for default"
+  },
+  "subscriptions": {
+    "message": "Subscription Management"
+  },
+  "addSubscription": {
+    "message": "+ Add Subscription"
+  },
+  "subscriptionName": {
+    "message": "Subscription Name"
+  },
+  "subscriptionUrl": {
+    "message": "Subscription URL"
+  },
+  "healthStatus": {
+    "message": "Health Status"
+  },
+  "healthy": {
+    "message": "Healthy"
+  },
+  "expired": {
+    "message": "Expired"
+  },
+  "down": {
+    "message": "Down"
+  },
+  "error": {
+    "message": "Error"
+  },
+  "infinite": {
+    "message": "Unlimited"
+  },
+  "dataManagement": {
+    "message": "Data Management"
+  },
+  "syncEnabled": {
+    "message": "Cloud Sync Enabled"
+  },
+  "syncHint": {
+    "message": "Sync Info:\n✓ Display settings, switches, and API config sync across devices\n✗ Subscriptions and favorite nodes are local only (privacy protection)"
+  },
+  "syncExplanation": {
+    "message": "Sync Info:"
+  },
+  "syncWillSync": {
+    "message": "Display settings, switches, and API config sync across devices"
+  },
+  "syncLocalOnly": {
+    "message": "Subscriptions and favorite nodes are local only (privacy protection)"
+  },
+  "export": {
+    "message": "Export"
+  },
+  "import": {
+    "message": "Import"
+  },
+  "securityWarning": {
+    "message": "⚠️ Exported file contains your subscription keys and API secret. Keep it safe!"
+  },
+  "clearData": {
+    "message": "Reset All Data"
+  },
+  "advanced": {
+    "message": "Advanced"
+  },
+  "save": {
+    "message": "Save"
+  },
+  "cancel": {
+    "message": "Close"
+  },
+  "nodes": {
+    "message": "Nodes"
+  },
+  "showNodeType": {
+    "message": "Show Node Type"
+  },
+  "dualColumn": {
+    "message": "Enable Dual Column"
+  },
+  "autoDelete": {
+    "message": "Auto Delete Invalid"
+  },
+  "autoSort": {
+    "message": "Auto Sort by Latency"
+  },
+  "language": {
+    "message": "Language"
+  },
+  "global": {
+    "message": "Global"
+  },
+  "rule": {
+    "message": "Rule"
+  },
+  "direct": {
+    "message": "Direct"
+  },
+  "connected": {
+    "message": "Connected"
+  },
+  "switched": {
+    "message": "Switched"
+  },
+  "switchFailed": {
+    "message": "Switch Failed"
+  },
+  "testComplete": {
+    "message": "Test Complete"
+  },
+  "testProgress": {
+    "message": "Test Progress"
+  },
+  "noNodes": {
+    "message": "No Nodes"
+  },
+  "loadFailed": {
+    "message": "Load Failed"
+  },
+  "configSaved": {
+    "message": "Config Saved"
+  },
+  "configImported": {
+    "message": "Config Imported"
+  },
+  "configExported": {
+    "message": "Config Exported"
+  },
+  "cleared": {
+    "message": "Cleared"
+  },
+  "copied": {
+    "message": "Copied"
+  },
+  "nodeManagement": {
+    "message": "Node Management"
+  },
+  "nodeList": {
+    "message": "Node List"
+  },
+  "searchNode": {
+    "message": "Search nodes..."
+  },
+  "hint": {
+    "message": "Please click \"Load Subscription\" to refresh nodes after subscription update"
+  },
+  "loading": {
+    "message": "Loading..."
+  },
+  "mode": {
+    "message": " Mode"
+  },
+  "delete": {
+    "message": "Delete"
+  },
+  "showNodeType": {
+    "message": "Show Node Type"
+  },
+  "dualColumn": {
+    "message": "Enable Dual Column"
+  },
+  "autoDelete": {
+    "message": "Auto Delete Invalid"
+  },
+  "languageSelect": {
+    "message": "Language / 语言"
+  },
+  "display": {
+    "message": "Display"
+  },
+  "apiUrlHint": {
+    "message": "IP:Port, e.g. 127.0.0.1:9999"
+  },
+  "apiSecretHint": {
+    "message": "Clash API authentication secret (optional)"
+  },
+  "emptySubscriptions": {
+    "message": "No subscriptions, add one"
+  },
+  "addSubscriptionTitle": {
+    "message": "Add Subscription"
+  },
+  "editSubscriptionTitle": {
+    "message": "Edit Subscription"
+  },
+  "settingsAutoSaved": {
+    "message": "✓ Settings auto-saved"
+  },
+  "fillSubscriptionFields": {
+    "message": "Please fill in subscription name and URL"
+  },
+  "subscriptionUpdated": {
+    "message": "Subscription updated"
+  },
+  "subscriptionAdded": {
+    "message": "Subscription added"
+  },
+  "saveFailed": {
+    "message": "Save failed"
+  },
+  "subscriptionDeleted": {
+    "message": "Subscription deleted"
+  },
+  "deleteFailed": {
+    "message": "Delete failed"
+  },
+  "allDataCleared": {
+    "message": "✓ All data cleared"
+  },
+  "clearFailed": {
+    "message": "Clear failed, please try again"
+  },
+  "exportFailed": {
+    "message": "Export failed, please try again"
+  },
+  "configFormatError": {
+    "message": "❌ Invalid config file format"
+  },
+  "importFailed": {
+    "message": "❌ Import failed, please check file format"
+  },
+  "confirmDeleteSubscription": {
+    "message": "Are you sure you want to delete this subscription?"
+  },
+  "confirmClearAllData1": {
+    "message": "⚠️ WARNING: This will clear all data!\n\nThis will delete:\n• All subscription links\n• API configuration\n• All settings\n• Favorite nodes list\n\nThis action cannot be undone! Continue?"
+  },
+  "confirmClearAllData2": {
+    "message": "Please confirm again: Really delete all data?"
+  },
+  "confirmImportConfig": {
+    "message": "⚠️ About to import configuration!\n\nExport date: {exportDate}\nVersion: {version}\n\nThis will overwrite existing configuration:\n• {subCount} subscriptions\n• {favCount} favorite nodes\n• Display settings (dark mode, dual column, etc.)\n• API configuration and secret\n• Smart connect keyword rules\n\nContinue?"
+  },
+  "trafficUsed": {
+    "message": "📊 Used:"
+  },
+  "trafficRemaining": {
+    "message": "📦 Remaining:"
+  },
+  "infiniteTraffic": {
+    "message": "♾️ Unlimited"
+  },
+  "corsError": {
+    "message": "⚠️ CORS limit, cannot get traffic"
+  },
+  "loadingTraffic": {
+    "message": "Loading..."
+  },
+  "healthyTitle": {
+    "message": "Healthy"
+  },
+  "expiredTitle": {
+    "message": "Link expired or invalid"
+  },
+  "downTitle": {
+    "message": "Provider down or blocked"
+  },
+  "errorTitle": {
+    "message": "Connection failed"
+  },
+  "trafficInfoInClear": {
+    "message": "• Traffic info"
+  },
+  "toggleUrlVisibility": {
+    "message": "Show/Hide URL"
+  },
+  "currentBadge": {
+    "message": "✓ Current"
+  },
+  "nodeAvailable": {
+    "message": "✓ Available"
+  },
+  "nodeUnavailable": {
+    "message": "✗ Unavailable"
+  },
+  "contextConnect": {
+    "message": "🔗 Connect"
+  },
+  "contextTestDelay": {
+    "message": "⚡ Test"
+  },
+  "untested": {
+    "message": "Untested"
+  },
+  "startTestAll": {
+    "message": "Starting to test all nodes"
+  },
+  "testCompleteFastest": {
+    "message": "✅ Test complete! Fastest: {name} ({delay}ms)"
+  },
+  "testCompleteAllUnavailable": {
+    "message": "✅ Test complete, but all nodes unavailable"
+  },
+  "testInProgress": {
+    "message": "⚠️ Test in progress, please wait..."
+  },
+  "testFailed": {
+    "message": "❌ Test failed"
+  },
+  "testError": {
+    "message": "Test failed"
+  },
+  "latencyResult": {
+    "message": "Latency: {delay}ms"
+  },
+  "testInProgressDetected": {
+    "message": "Test in progress detected..."
+  },
+  "nodeNoTestResult": {
+    "message": "Node {name} has no test result"
+  },
+  "encryptChoiceTitle": {
+    "message": "Choose Encryption Method"
+  },
+  "encryptDefault": {
+    "message": "Default Encryption (Recommended)"
+  },
+  "encryptDefaultDesc": {
+    "message": "Use built-in key encryption, no password needed when importing"
+  },
+  "encryptCustom": {
+    "message": "Custom Password Encryption"
+  },
+  "encryptCustomDesc": {
+    "message": "Use your own password encryption, password required when importing"
+  },
+  "passwordRequired": {
+    "message": "Please enter encryption password (at least 6 characters)"
+  },
+  "passwordConfirm": {
+    "message": "Please enter password again to confirm"
+  },
+  "passwordShort": {
+    "message": "❌ Password must be at least 6 characters"
+  },
+  "passwordMismatch": {
+    "message": "❌ Passwords do not match"
+  },
+  "decryptPasswordRequired": {
+    "message": "This config file is encrypted with custom password, please enter password"
+  },
+  "passwordWrong": {
+    "message": "❌ Wrong password or file is corrupted"
+  },
+  "configExported": {
+    "message": "✓ Configuration encrypted and exported"
+  },
+  "configImported": {
+    "message": "✓ Configuration imported"
+  },
+  "selectEncryptOption": {
+    "message": "Please select an encryption method"
+  },
+  "importConfirmTitle": {
+    "message": "Confirm Import Configuration"
+  },
+  "importInfo": {
+    "message": "Configuration File Information"
+  },
+  "exportInfo": {
+    "message": "Export Date: {date} Version: {ver}"
+  },
+  "customPasswordEncrypted": {
+    "message": "🔐 Custom Password Encrypted"
+  },
+  "importConfirmContent": {
+    "message": "This will overwrite your current configuration:\\n• {subCount} subscriptions\\n• {favCount} favorite nodes\\n• Display settings (dark mode, dual column, etc.)\\n• API config and keys\\n• Smart connection keywords"
+  },
+  "sponsor": {
+    "message": "Sponsor"
+  },
+  "sponsorTitle": {
+    "message": "Thank you for your support!"
+  },
+  "sponsorDesc": {
+    "message": "If you find this tool helpful, feel free to buy me a coffee☕"
+  },
+  "alipay": {
+    "message": "Alipay"
+  },
+  "wechat": {
+    "message": "WeChat Pay"
+  },
+  "scanToDonate": {
+    "message": "Scan QR code to donate"
+  },
+  "cloudSyncStatus": {
+    "message": "Cloud Sync Status"
+  },
+  "syncNow": {
+    "message": "🔄 Sync Now"
+  },
+  "syncChecking": {
+    "message": "Checking..."
+  },
+  "syncEnabled": {
+    "message": "✓ Cloud sync enabled"
+  },
+  "syncDisabled": {
+    "message": "✗ Cloud sync disabled"
+  },
+  "syncLastTime": {
+    "message": "Last sync: {time}"
+  },
+  "syncNever": {
+    "message": "Never synced"
+  },
+  "syncSuccess": {
+    "message": "✓ Sync successful"
+  },
+  "syncFailed": {
+    "message": "✗ Sync failed"
+  },
+  "syncedAt": {
+    "message": "✓ Synced at {time}"
+  },
+  "subscriptions": {
+    "message": "subscriptions"
+  },
+  "favoriteNodes": {
+    "message": "favorite nodes"
+  },
+  "confirmImport": {
+    "message": "Confirm Import"
+  },
+  "displaySettingsList": {
+    "message": "Display settings (dark mode, dual column, etc.)"
+  },
+  "decrypt": {
+    "message": "Decrypt"
+  }
+}

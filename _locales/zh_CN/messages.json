@@ -1,0 +1,529 @@
+{
+  "extensionName": {
+    "message": "ProxyHub - 节点管理工具",
+    "description": "高效的节点管理工具，支持一键测速、智能切换、节点收藏等功能"
+  },
+  "extensionDescription": {
+    "message": "高效的节点管理工具，支持一键测速、智能切换、节点收藏等功能"
+  },
+  "appName": {
+    "message": "ProxyHub"
+  },
+  "popup": {
+    "message": "更新节点",
+    "description": "更新节点按钮文字"
+  },
+  "updateNodes": {
+    "message": "加载订阅"
+  },
+  "testAll": {
+    "message": "测试延迟"
+  },
+  "stopTest": {
+    "message": "停止测试"
+  },
+  "settings": {
+    "message": "设置"
+  },
+  "darkMode": {
+    "message": "深色模式"
+  },
+  "lightMode": {
+    "message": "浅色模式"
+  },
+  "testing": {
+    "message": "测试中"
+  },
+  "untested": {
+    "message": "未测试"
+  },
+  "current": {
+    "message": "当前连接"
+  },
+  "favorite": {
+    "message": "收藏"
+  },
+  "unfavorite": {
+    "message": "取消收藏"
+  },
+  "test": {
+    "message": "测试"
+  },
+  "available": {
+    "message": "可用"
+  },
+  "unavailable": {
+    "message": "不可用"
+  },
+  "used": {
+    "message": "已用"
+  },
+  "remaining": {
+    "message": "剩余"
+  },
+  "total": {
+    "message": "总量"
+  },
+  "expire": {
+    "message": "到期时间"
+  },
+  "title": {
+    "message": "设置"
+  },
+  "apiConfig": {
+    "message": "API 配置"
+  },
+  "apiUrl": {
+    "message": "Clash API 地址"
+  },
+  "apiSecret": {
+    "message": "密钥 (Secret)"
+  },
+  "smartConnect": {
+    "message": "智能连接"
+  },
+  "smartConnectKeywords": {
+    "message": "智能连接关键词（可选）"
+  },
+  "smartConnectHint": {
+    "message": "只在这些关键词的节点中选择最快的。多个关键词用英文逗号分隔，会自动去除空格。留空则从所有节点中选择"
+  },
+  "smartConnectKeywordsHint": {
+    "message": "只在这些关键词的节点中选择最快的。留空则从所有节点中选择"
+  },
+  "autoSort": {
+    "message": "自动排序"
+  },
+  "testConcurrency": {
+    "message": "并发测试数量"
+  },
+  "testConcurrencyHint": {
+    "message": "同时测试的节点数量。建议 5-20，太高可能导致请求失败"
+  },
+  "testUrl": {
+    "message": "测速目标地址"
+  },
+  "testUrlHint": {
+    "message": "用于测试节点延迟的目标地址。必须返回 HTTP 204 (No Content)。留空使用默认值"
+  },
+  "subscriptions": {
+    "message": "订阅管理"
+  },
+  "addSubscription": {
+    "message": "+ 添加订阅"
+  },
+  "subscriptionName": {
+    "message": "订阅名称"
+  },
+  "subscriptionUrl": {
+    "message": "订阅链接"
+  },
+  "healthStatus": {
+    "message": "健康状态"
+  },
+  "healthy": {
+    "message": "健康"
+  },
+  "expired": {
+    "message": "失效"
+  },
+  "down": {
+    "message": "跑路"
+  },
+  "error": {
+    "message": "连接失败"
+  },
+  "infinite": {
+    "message": "无限流量"
+  },
+  "dataManagement": {
+    "message": "数据管理"
+  },
+  "syncEnabled": {
+    "message": "已开启云同步"
+  },
+  "syncHint": {
+    "message": "同步说明：\n✓ 显示设置、开关状态、API配置会自动跨设备同步\n✗ 订阅链接、收藏节点仅在本地存储（保护隐私）"
+  },
+  "syncExplanation": {
+    "message": "同步说明："
+  },
+  "syncWillSync": {
+    "message": "显示设置、开关状态、API配置会自动跨设备同步"
+  },
+  "syncLocalOnly": {
+    "message": "订阅链接、收藏节点仅在本地存储（保护隐私）"
+  },
+  "export": {
+    "message": "导出配置"
+  },
+  "import": {
+    "message": "导入配置"
+  },
+  "securityWarning": {
+    "message": "⚠️ 导出的文件包含您的订阅密钥和 API 密钥，请妥善保管"
+  },
+  "clearData": {
+    "message": "彻底重置所有数据"
+  },
+  "advanced": {
+    "message": "高级设置"
+  },
+  "save": {
+    "message": "保存"
+  },
+  "cancel": {
+    "message": "关闭"
+  },
+  "nodes": {
+    "message": "节点"
+  },
+  "language": {
+    "message": "语言"
+  },
+  "global": {
+    "message": "全局"
+  },
+  "rule": {
+    "message": "规则"
+  },
+  "direct": {
+    "message": "直连"
+  },
+  "connected": {
+    "message": "已连接"
+  },
+  "switched": {
+    "message": "已切换"
+  },
+  "switchFailed": {
+    "message": "切换失败"
+  },
+  "testComplete": {
+    "message": "测试完成"
+  },
+  "testProgress": {
+    "message": "测试进度"
+  },
+  "noNodes": {
+    "message": "暂无节点"
+  },
+  "loadFailed": {
+    "message": "加载失败"
+  },
+  "configSaved": {
+    "message": "配置已保存"
+  },
+  "configImported": {
+    "message": "配置已导入"
+  },
+  "configExported": {
+    "message": "配置已导出"
+  },
+  "cleared": {
+    "message": "已清除"
+  },
+  "copied": {
+    "message": "已复制"
+  },
+  "nodeManagement": {
+    "message": "节点管理"
+  },
+  "nodeList": {
+    "message": "节点列表"
+  },
+  "searchNode": {
+    "message": "搜索节点..."
+  },
+  "hint": {
+    "message": "订阅更新后请点击\"加载订阅\"刷新节点"
+  },
+  "loading": {
+    "message": "加载中..."
+  },
+  "mode": {
+    "message": "模式"
+  },
+  "delete": {
+    "message": "删除"
+  },
+  "showNodeType": {
+    "message": "显示节点类型"
+  },
+  "dualColumn": {
+    "message": "启用双列显示"
+  },
+  "autoDelete": {
+    "message": "自动删除无效配置"
+  },
+  "autoSort": {
+    "message": "自动按延迟排序"
+  },
+  "languageSelect": {
+    "message": "语言 / Language"
+  },
+  "display": {
+    "message": "显示"
+  },
+  "apiUrlHint": {
+    "message": "IP:端口，例如 127.0.0.1:9999"
+  },
+  "apiSecretHint": {
+    "message": "Clash API 认证密钥（可选）"
+  },
+  "emptySubscriptions": {
+    "message": "暂无订阅，请添加"
+  },
+  "addSubscriptionTitle": {
+    "message": "添加订阅"
+  },
+  "editSubscriptionTitle": {
+    "message": "编辑订阅"
+  },
+  "settingsAutoSaved": {
+    "message": "✓ 设置已自动保存"
+  },
+  "fillSubscriptionFields": {
+    "message": "请填写订阅名称和链接"
+  },
+  "subscriptionUpdated": {
+    "message": "订阅已更新"
+  },
+  "subscriptionAdded": {
+    "message": "订阅已添加"
+  },
+  "saveFailed": {
+    "message": "保存失败"
+  },
+  "subscriptionDeleted": {
+    "message": "订阅已删除"
+  },
+  "deleteFailed": {
+    "message": "删除失败"
+  },
+  "allDataCleared": {
+    "message": "✓ 所有数据已清除"
+  },
+  "clearFailed": {
+    "message": "清除失败，请重试"
+  },
+  "exportFailed": {
+    "message": "导出失败，请重试"
+  },
+  "configFormatError": {
+    "message": "❌ 配置文件格式错误"
+  },
+  "importFailed": {
+    "message": "❌ 导入失败，请检查文件格式"
+  },
+  "confirmDeleteSubscription": {
+    "message": "确定要删除这个订阅吗？"
+  },
+  "confirmClearAllData1": {
+    "message": "⚠️ 警告：此操作将清除所有数据！\n\n将删除以下内容：\n• 所有订阅链接\n• API 配置\n• 所有设置项\n• 收藏节点列表\n\n此操作不可恢复！确定要继续吗？"
+  },
+  "confirmClearAllData2": {
+    "message": "请再次确认：真的要删除所有数据吗？"
+  },
+  "confirmImportConfig": {
+    "message": "⚠️ 即将导入配置！\n\n导出时间：{exportDate}\n版本：{version}\n\n此操作将覆盖现有配置：\n• {subCount} 个订阅\n• {favCount} 个收藏节点\n• 显示设置（深色模式、双列显示等）\n• API 配置和密钥\n• 智能连接关键词规则\n\n确定要继续吗？"
+  },
+  "trafficUsed": {
+    "message": "📊 已用:"
+  },
+  "trafficRemaining": {
+    "message": "📦 剩余:"
+  },
+  "infiniteTraffic": {
+    "message": "♾️ 无限流量"
+  },
+  "corsError": {
+    "message": "⚠️ CORS限制无法获取流量"
+  },
+  "loadingTraffic": {
+    "message": "加载中..."
+  },
+  "healthyTitle": {
+    "message": "健康"
+  },
+  "expiredTitle": {
+    "message": "链接失效或过期"
+  },
+  "downTitle": {
+    "message": "机场跑路或被封"
+  },
+  "errorTitle": {
+    "message": "连接失败"
+  },
+  "trafficInfoInClear": {
+    "message": "• 流量信息"
+  },
+  "toggleUrlVisibility": {
+    "message": "显示/隐藏链接"
+  },
+  "currentBadge": {
+    "message": "✓ 当前连接"
+  },
+  "nodeAvailable": {
+    "message": "✓ 可用"
+  },
+  "nodeUnavailable": {
+    "message": "✗ 不可用"
+  },
+  "contextConnect": {
+    "message": "🔗 连接"
+  },
+  "contextTestDelay": {
+    "message": "⚡ 测试延迟"
+  },
+  "untested": {
+    "message": "未测试"
+  },
+  "startTestAll": {
+    "message": "开始测试所有节点"
+  },
+  "testCompleteFastest": {
+    "message": "✅ 测试完成！最快: {name} ({delay}ms)"
+  },
+  "testCompleteAllUnavailable": {
+    "message": "✅ 测试完成，但所有节点都不可用"
+  },
+  "testInProgress": {
+    "message": "⚠️ 测试正在进行中，请稍候..."
+  },
+  "testFailed": {
+    "message": "❌ 测试失败"
+  },
+  "testError": {
+    "message": "测试失败"
+  },
+  "latencyResult": {
+    "message": "延迟: {delay}ms"
+  },
+  "testInProgressDetected": {
+    "message": "检测到正在进行的测试..."
+  },
+  "nodeNoTestResult": {
+    "message": "节点 {name} 没有测试结果"
+  },
+  "encryptChoiceTitle": {
+    "message": "选择加密方式"
+  },
+  "encryptDefault": {
+    "message": "默认加密（推荐）"
+  },
+  "encryptDefaultDesc": {
+    "message": "使用内置密钥加密，导入时无需输入密码"
+  },
+  "encryptCustom": {
+    "message": "自定义密码加密"
+  },
+  "encryptCustomDesc": {
+    "message": "使用您自己的密码加密，导入时需要输入密码"
+  },
+  "passwordRequired": {
+    "message": "请输入加密密码（至少6位字符）"
+  },
+  "passwordConfirm": {
+    "message": "请再次输入密码确认"
+  },
+  "passwordShort": {
+    "message": "❌ 密码至少需要6位字符"
+  },
+  "passwordMismatch": {
+    "message": "❌ 两次输入的密码不一致"
+  },
+  "decryptPasswordRequired": {
+    "message": "此配置文件使用自定义密码加密，请输入密码"
+  },
+  "passwordWrong": {
+    "message": "❌ 密码错误或文件已损坏"
+  },
+  "configExported": {
+    "message": "✓ 配置已加密导出"
+  },
+  "configImported": {
+    "message": "✓ 配置已导入"
+  },
+  "selectEncryptOption": {
+    "message": "请选择一个加密方式"
+  },
+  "importConfirmTitle": {
+    "message": "确认导入配置"
+  },
+  "importInfo": {
+    "message": "配置文件信息"
+  },
+  "exportInfo": {
+    "message": "导出时间：{date} 版本：{ver}"
+  },
+  "customPasswordEncrypted": {
+    "message": "🔐 自定义密码加密"
+  },
+  "importConfirmContent": {
+    "message": "此操作将覆盖现有配置：\\n• {subCount} 个订阅\\n• {favCount} 个收藏节点\\n• 显示设置（深色模式、双列显示等）\\n• API 配置和密钥\\n• 智能连接关键词规则"
+  },
+  "sponsor": {
+    "message": "赞助"
+  },
+  "sponsorTitle": {
+    "message": "感谢您的支持！"
+  },
+  "sponsorDesc": {
+    "message": "如果您觉得这个工具对您有帮助，欢迎请我喝杯咖啡☕"
+  },
+  "alipay": {
+    "message": "支付宝"
+  },
+  "wechat": {
+    "message": "微信支付"
+  },
+  "scanToDonate": {
+    "message": "扫描二维码即可赞助"
+  },
+  "cloudSyncStatus": {
+    "message": "云同步状态"
+  },
+  "syncNow": {
+    "message": "🔄 立即同步"
+  },
+  "syncChecking": {
+    "message": "检查中..."
+  },
+  "syncEnabled": {
+    "message": "✓ 已启用云同步"
+  },
+  "syncDisabled": {
+    "message": "✗ 未启用云同步"
+  },
+  "syncLastTime": {
+    "message": "最后同步: {time}"
+  },
+  "syncNever": {
+    "message": "从未同步"
+  },
+  "syncSuccess": {
+    "message": "✓ 同步成功"
+  },
+  "syncFailed": {
+    "message": "✗ 同步失败"
+  },
+  "syncedAt": {
+    "message": "✓ 已同步 {time}"
+  },
+  "subscriptions": {
+    "message": "个订阅"
+  },
+  "favoriteNodes": {
+    "message": "个收藏节点"
+  },
+  "confirmImport": {
+    "message": "确认导入"
+  },
+  "displaySettingsList": {
+    "message": "显示设置（深色模式、双列显示等）"
+  },
+  "decrypt": {
+    "message": "解密"
+  }
+}
