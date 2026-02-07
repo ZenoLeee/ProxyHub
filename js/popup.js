@@ -131,9 +131,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // 监听设置变化
   chrome.storage.onChanged.addListener((changes, area) => {
-    // 监听 sync 和 local 两个区域的变化
-    const settingsChanged = (area === 'sync' && changes.syncSettings) ||
-                           (area === 'local' && (changes.settings || changes.localSettings));
+    // 监听 local 区域的设置变化
+    const settingsChanged = (area === 'local' && changes.settings);
 
     if (settingsChanged) {
       loadSettings().then(() => {
@@ -163,29 +162,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 async function loadSettings() {
   try {
-    // 从 sync 和 local 分别加载设置
-    const [syncResult, localResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['localSettings', 'syncSettings'])
-    ]);
+    // 从 local 加载所有设置
+    const localResult = await chrome.storage.local.get(['settings']);
 
-    const syncSettings = syncResult.syncSettings || {};
-    const localSettings = localResult.localSettings || {};
-    const localSyncSettings = localResult.syncSettings || {};
-
-    // 优先从 local syncSettings 读取（因为保存时总是先保存到 local），其次从 sync 读取
-    const effectiveSyncSettings = { ...syncSettings, ...localSyncSettings };
-
-    // 兼容旧版本：如果新格式不存在，尝试从旧格式加载
-    let mergedSettings = { ...effectiveSyncSettings, ...localSettings };
-
-    // 如果新格式为空，尝试从旧格式加载
-    if (Object.keys(mergedSettings).length === 0) {
-      const oldResult = await chrome.storage.local.get(['settings']);
-      if (oldResult.settings) {
-        mergedSettings = oldResult.settings;
-      }
-    }
+    const mergedSettings = localResult.settings || {};
 
     if (mergedSettings) {
       settings = {
@@ -426,23 +406,17 @@ async function toggleDarkMode() {
     // 应用深色模式
     applyDarkMode(settings.darkMode);
 
-    // 保存到 syncSettings（跨设备同步）
-    const [syncResult, localResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['syncSettings'])
-    ]);
-    const currentSettings = { ...(syncResult.syncSettings || {}), ...(localResult.syncSettings || {}) };
+    // 保存到 settings
+    const localResult = await chrome.storage.local.get(['settings']);
+    const currentSettings = localResult.settings || {};
 
     const newSettings = {
       ...currentSettings,
       darkMode: settings.darkMode
     };
 
-    // 同时保存到 sync 和 local
-    await Promise.all([
-      chrome.storage.sync.set({ syncSettings: newSettings }),
-      chrome.storage.local.set({ syncSettings: newSettings })
-    ]);
+    // 保存到 local
+    await chrome.storage.local.set({ settings: newSettings });
 
     console.log('深色模式已切换:', settings.darkMode ? '深色' : '浅色');
 

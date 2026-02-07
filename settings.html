@@ -831,23 +831,6 @@
             background: #d0d0d0;
         }
 
-        /* 同步状态框 */
-        .sync-status-box {
-            margin-top: 20px;
-            padding: 16px;
-            border-radius: 8px;
-        }
-
-        .sync-status-title {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .sync-status-text {
-            font-size: 13px;
-            color: #666;
-        }
-
         /* 深色模式 */
         body.dark-mode {
             background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
@@ -1040,18 +1023,6 @@
 
         body.dark-mode #panel-sponsor p[style*="color: #999"] {
             color: #718096 !important;
-        }
-
-        body.dark-mode #syncStatus {
-            color: #cbd5e0;
-        }
-
-        body.dark-mode .sync-status-title {
-            color: #e2e8f0;
-        }
-
-        body.dark-mode .sync-status-text {
-            color: #e2e8f0;
         }
 
         /* 订阅列表深色模式 */
@@ -1284,20 +1255,6 @@
                 <div class="panel" id="panel-data">
                     <div class="info-box" id="syncInfoBox">
                         <!-- 动态生成 -->
-                    </div>
-
-                    <!-- 同步状态 -->
-                    <div class="sync-status-box">
-                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                            <span class="sync-status-title" data-i18n="cloudSyncStatus">云同步状态</span>
-                            <button id="btnSyncNow" class="btn" style="padding: 6px 16px; font-size: 13px;" data-i18n="syncNow">
-                                🔄 立即同步
-                            </button>
-                        </div>
-                        <div id="syncStatus" class="sync-status-text">
-                            <span id="syncStatusText">检查中...</span>
-                            <span id="syncTime" style="margin-left: 8px;"></span>
-                        </div>
                     </div>
 
                     <div class="button-group">

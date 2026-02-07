@@ -63,22 +63,11 @@ async function clearTestState() {
 // 加载设置
 async function loadSettings() {
   try {
-    // 从 sync 和 local 分别加载设置
-    const [syncResult, localResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['localSettings', 'subscriptions', 'syncSettings'])
-    ]);
+    // 从 local 加载所有设置
+    const localResult = await chrome.storage.local.get(['settings', 'subscriptions']);
 
-    const syncSettings = syncResult.syncSettings || {};
-    const localSettings = localResult.localSettings || {};
-    const localSyncSettings = localResult.syncSettings || {};
+    const settings = localResult.settings || {};
     const subscriptions = localResult.subscriptions || [];
-
-    // 优先从 local syncSettings 读取（因为保存时总是先保存到 local），其次从 sync 读取
-    const effectiveSyncSettings = { ...syncSettings, ...localSyncSettings };
-
-    // 合并设置
-    const settings = { ...effectiveSyncSettings, ...localSettings };
 
     if (settings) {
       if (settings.apiUrl) API_BASE = settings.apiUrl;
@@ -413,12 +402,9 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         });
 
         // 从设置中读取并发数量
-        const [syncResult, localResult] = await Promise.all([
-          chrome.storage.sync.get(['syncSettings']),
-          chrome.storage.local.get(['syncSettings'])
-        ]);
-        const syncSettings = { ...(syncResult.syncSettings || {}), ...(localResult.syncSettings || {}) };
-        const CONCURRENT = syncSettings.testConcurrency || 10;
+        const localResult = await chrome.storage.local.get(['settings']);
+        const settings = localResult.settings || {};
+        const CONCURRENT = settings.testConcurrency || 10;
         const TIMEOUT = 10000; // 固定10秒超时
 
         let completed = 0;
@@ -752,12 +738,9 @@ async function smartSwitchToBest() {
     }
 
     // 从设置中读取并发数量
-    const [syncResult, localResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['syncSettings'])
-    ]);
-    const syncSettings = { ...(syncResult.syncSettings || {}), ...(localResult.syncSettings || {}) };
-    const CONCURRENT = syncSettings.testConcurrency || 10;
+    const localResult = await chrome.storage.local.get(['settings']);
+    const settings = localResult.settings || {};
+    const CONCURRENT = settings.testConcurrency || 10;
     const TIMEOUT = 10000; // 固定10秒超时
 
     const results = [];

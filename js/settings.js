@@ -77,8 +77,6 @@ async function applyTranslations(lang) {
     '#btnExport': 'export',
     '#btnImport': 'import',
     '#btnClearData': 'clearData',
-    '#btnSyncNow': 'syncNow',
-    '#panel-data span[data-i18n="cloudSyncStatus"]': 'cloudSyncStatus',
 
     // 赞助面板
     '#panel-sponsor h2': 'sponsorTitle',
@@ -147,139 +145,6 @@ function t(key, fallback = '') {
 let autoSaveTimer = null;
 let editingSubscriptionIndex = -1; // -1 表示添加新订阅，>=0 表示编辑现有订阅
 
-// 云同步定时器
-let syncTimer = null;
-
-// ==================== 云同步功能 ====================
-
-// 更新同步状态显示
-async function updateSyncStatus() {
-  const syncStatusText = document.getElementById('syncStatusText');
-  const syncTime = document.getElementById('syncTime');
-
-  if (!syncStatusText || !syncTime) return;
-
-  try {
-    // 从 local 读取 syncSettings（因为 local 总是最新的）
-    const localResult = await chrome.storage.local.get(['syncSettings']);
-    // 从 sync 读取最后同步时间
-    const syncResult = await chrome.storage.sync.get(['lastSyncTime']);
-
-    // 检查是否有保存过的设置
-    const hasSettings = localResult.syncSettings && Object.keys(localResult.syncSettings).length > 0;
-
-    if (hasSettings) {
-      // 显示最后同步时间
-      if (syncResult.lastSyncTime) {
-        const lastSync = new Date(syncResult.lastSyncTime);
-        const timeStr = lastSync.toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-        syncStatusText.textContent = t('syncedAt', `✓ 已同步 ${timeStr}`).replace('{time}', timeStr);
-        syncTime.textContent = '';
-      } else {
-        syncStatusText.textContent = t('syncEnabled', '✓ 已启用云同步');
-        syncTime.textContent = '';
-      }
-    } else {
-      syncStatusText.textContent = t('syncDisabled', '✗ 未启用云同步');
-      syncTime.textContent = '';
-    }
-  } catch (error) {
-    console.error('检查同步状态失败:', error);
-    syncStatusText.textContent = t('syncFailed', '✗ 同步失败');
-    syncTime.textContent = '';
-  }
-}
-
-// 格式化同步时间
-function formatSyncTime(date) {
-  const now = new Date();
-  const diffMs = now - date;
-  const diffMins = Math.floor(diffMs / 60000);
-
-  if (diffMins < 1) {
-    return '刚刚';
-  } else if (diffMins < 60) {
-    return `${diffMins} 分钟前`;
-  } else if (diffMins < 1440) {
-    const hours = Math.floor(diffMins / 60);
-    return `${hours} 小时前`;
-  } else {
-    return date.toLocaleDateString();
-  }
-}
-
-// 手动同步
-async function manualSync() {
-  const syncStatusText = document.getElementById('syncStatusText');
-  const syncTime = document.getElementById('syncTime');
-
-  if (!syncStatusText) return;
-
-  syncStatusText.textContent = t('syncChecking', '检查中...');
-
-  try {
-    // 读取本地 syncSettings
-    const localResult = await chrome.storage.local.get(['syncSettings']);
-
-    // 写入 chrome.storage.sync 触发同步
-    if (localResult.syncSettings) {
-      await chrome.storage.sync.set({ syncSettings: localResult.syncSettings });
-
-      // 记录同步时间
-      const now = new Date().toISOString();
-      await chrome.storage.local.set({ lastSyncTime: now });
-      await chrome.storage.sync.set({ lastSyncTime: now });
-
-      // 更新显示
-      const timeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-      syncStatusText.textContent = t('syncedAt', `✓ 已同步 ${timeStr}`).replace('{time}', timeStr);
-      syncTime.textContent = '';
-
-      showToast(t('syncSuccess', '✓ 同步成功'));
-    } else {
-      syncStatusText.textContent = t('syncDisabled', '✗ 未启用云同步');
-      syncTime.textContent = '';
-    }
-  } catch (error) {
-    console.error('同步失败:', error);
-    syncStatusText.textContent = t('syncFailed', '✗ 同步失败');
-    showToast('❌ ' + t('syncFailed', '同步失败'));
-  }
-}
-
-// 启动定时同步
-function startSyncTimer() {
-  // 每 5 分钟自动同步一次
-  if (syncTimer) {
-    clearInterval(syncTimer);
-  }
-
-  syncTimer = setInterval(async () => {
-    try {
-      const result = await chrome.storage.local.get(['syncSettings']);
-      if (result.syncSettings) {
-        await chrome.storage.sync.set({ syncSettings: result.syncSettings });
-
-        const now = new Date().toISOString();
-        await chrome.storage.local.set({ lastSyncTime: now });
-        await chrome.storage.sync.set({ lastSyncTime: now });
-
-        // 如果当前在数据管理面板，更新显示
-        const dataPanel = document.getElementById('panel-data');
-        if (dataPanel && dataPanel.classList.contains('active')) {
-          const syncStatusText = document.getElementById('syncStatusText');
-          if (syncStatusText) {
-            const timeStr = new Date().toLocaleTimeString('zh-CN', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
-            syncStatusText.textContent = t('syncedAt', `✓ 已同步 ${timeStr}`).replace('{time}', timeStr);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('自动同步失败:', error);
-    }
-  }, 5 * 60 * 1000); // 5 分钟
-}
-
 document.addEventListener('DOMContentLoaded', async () => {
   // 先加载设置（包括应用翻译）
   await loadSettings();
@@ -288,11 +153,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupEventListeners();
   // 添加 toast 样式
   addToastStyles();
-
-  // 初始化同步状态
-  await updateSyncStatus();
-  // 启动定时同步
-  startSyncTimer();
 
   // 监听 storage 变化，自动更新显示
   chrome.storage.onChanged.addListener((changes, area) => {
@@ -306,18 +166,8 @@ document.addEventListener('DOMContentLoaded', async () => {
       loadSubscriptions();
     }
 
-    // 监听 syncSettings 变化（包括 darkMode）
-    if (area === 'sync' && changes.syncSettings) {
-      loadSettings();
-    }
-
-    // 监听 local storage 中的 syncSettings 变化
-    if (area === 'local' && changes.syncSettings) {
-      loadSettings();
-    }
-
-    // 监听 localSettings 变化
-    if (area === 'local' && changes.localSettings) {
+    // 监听 settings 变化
+    if (area === 'local' && changes.settings) {
       loadSettings();
     }
   });
@@ -349,9 +199,8 @@ function setupEventListeners() {
       // 重新应用翻译（确保隐藏面板的内容也被翻译）
       applyTranslations(currentLang);
 
-      // 如果切换到数据管理面板，更新同步状态
+      // 如果切换到数据管理面板，更新存储说明
       if (panelId === 'data') {
-        updateSyncStatus();
         updateSyncInfoBox();
       }
     });
@@ -383,12 +232,6 @@ function setupEventListeners() {
   const importFileInput = document.getElementById('importFileInput');
   if (importFileInput) {
     importFileInput.addEventListener('change', importConfig);
-  }
-
-  // 同步按钮
-  const btnSyncNow = document.getElementById('btnSyncNow');
-  if (btnSyncNow) {
-    btnSyncNow.addEventListener('click', manualSync);
   }
 
   // API 地址输入框 - 输入时自动保存
@@ -802,41 +645,29 @@ function updateToggleSwitch(switchId, checkbox) {
 
 async function loadSettings() {
   try {
-    // 从 sync 和 local 分别加载设置
-    const [syncResult, localResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['localSettings', 'language', 'syncSettings'])
-    ]);
+    // 从 local 加载所有设置
+    const localResult = await chrome.storage.local.get(['settings', 'language']);
 
-    const syncSettings = syncResult.syncSettings || {};
-    const localSettings = localResult.localSettings || {};
-    const localSyncSettings = localResult.syncSettings || {};
+    const settings = localResult.settings || {};
+    const savedLang = settings.language || localResult.language || 'zh_CN';
 
-    // 获取语言设置（直接从 storage 返回的结果中获取）
-    const savedLang = localResult.language || 'zh_CN';
-
-    // 优先从 local syncSettings 读取（因为保存时总是先保存到 local），其次从 sync 读取
-    const effectiveSyncSettings = { ...syncSettings, ...localSyncSettings };
-
-    // 合并设置
-    const settings = {
-      // 显示设置 - 使用 sync (跨设备同步)
-      showNodeType: effectiveSyncSettings.showNodeType || false,
-      dualColumn: effectiveSyncSettings.dualColumn || false,
-      darkMode: effectiveSyncSettings.darkMode || false,
-      autoDelete: effectiveSyncSettings.autoDelete || false,
-      autoSort: effectiveSyncSettings.autoSort || false,
-      smartConnect: effectiveSyncSettings.smartConnect || false,
-      smartConnectKeywords: effectiveSyncSettings.smartConnectKeywords || '',
-      testConcurrency: effectiveSyncSettings.testConcurrency || 10,
-      testUrl: localSettings.testUrl || '',
-      // API配置 - 从 syncSettings 中读取（保存时是存在这里的）
-      apiUrl: effectiveSyncSettings.apiUrl || 'http://127.0.0.1:9999',
-      apiSecret: effectiveSyncSettings.apiSecret || 'set-your-secret'
+    // 默认值
+    const effectiveSettings = {
+      showNodeType: settings.showNodeType || false,
+      dualColumn: settings.dualColumn || false,
+      darkMode: settings.darkMode || false,
+      autoDelete: settings.autoDelete || false,
+      autoSort: settings.autoSort || false,
+      smartConnect: settings.smartConnect || false,
+      smartConnectKeywords: settings.smartConnectKeywords || '',
+      testConcurrency: settings.testConcurrency || 10,
+      testUrl: settings.testUrl || '',
+      apiUrl: settings.apiUrl || 'http://127.0.0.1:9097',
+      apiSecret: settings.apiSecret || 'set-your-secret'
     };
 
     // 去除 http:// 前缀后再显示
-    let displayUrl = settings.apiUrl || '127.0.0.1:9999';
+    let displayUrl = effectiveSettings.apiUrl || '127.0.0.1:9097';
     if (displayUrl.startsWith('http://')) {
       displayUrl = displayUrl.substring(7);
     } else if (displayUrl.startsWith('https://')) {
@@ -844,23 +675,23 @@ async function loadSettings() {
     }
 
     document.getElementById('apiUrl').value = displayUrl;
-    document.getElementById('apiSecret').value = settings.apiSecret;
-    document.getElementById('smartConnectKeywords').value = settings.smartConnectKeywords || '';
-    document.getElementById('testConcurrency').value = settings.testConcurrency;
-    document.getElementById('testUrl').value = settings.testUrl || '';
+    document.getElementById('apiSecret').value = effectiveSettings.apiSecret;
+    document.getElementById('smartConnectKeywords').value = effectiveSettings.smartConnectKeywords || '';
+    document.getElementById('testConcurrency').value = effectiveSettings.testConcurrency;
+    document.getElementById('testUrl').value = effectiveSettings.testUrl || '';
     document.getElementById('languageSelect').value = savedLang;  // 设置语言选择框
 
     // 应用语言翻译（等待完成）
     await applyTranslations(savedLang);
-    document.getElementById('showNodeType').checked = settings.showNodeType || false;
-    document.getElementById('dualColumn').checked = settings.dualColumn || false;
-    document.getElementById('darkMode').checked = settings.darkMode || false;
-    document.getElementById('autoDelete').checked = settings.autoDelete || false;
-    document.getElementById('autoSort').checked = settings.autoSort || false;
-    document.getElementById('smartConnect').checked = settings.smartConnect || false;
+    document.getElementById('showNodeType').checked = effectiveSettings.showNodeType || false;
+    document.getElementById('dualColumn').checked = effectiveSettings.dualColumn || false;
+    document.getElementById('darkMode').checked = effectiveSettings.darkMode || false;
+    document.getElementById('autoDelete').checked = effectiveSettings.autoDelete || false;
+    document.getElementById('autoSort').checked = effectiveSettings.autoSort || false;
+    document.getElementById('smartConnect').checked = effectiveSettings.smartConnect || false;
 
     // 应用深色模式到设置页面
-    applyDarkMode(settings.darkMode || false);
+    applyDarkMode(effectiveSettings.darkMode || false);
 
     // 更新所有开关状态
     updateToggleSwitch('nodeTypeSwitch', document.getElementById('showNodeType'));
@@ -883,15 +714,11 @@ function updateSyncInfoBox() {
   if (!syncInfoBox) return;
 
   syncInfoBox.innerHTML = `
-    <strong>${t('syncExplanation', '同步说明：')}</strong>
+    <strong>${t('storageExplanation', '存储说明：')}</strong>
     <div style="margin-top: 8px; line-height: 1.8;">
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="color: #48bb78; font-weight: 500;">✓</span>
-        <span>${t('syncWillSync', '显示设置、开关状态、API配置会自动跨设备同步')}</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 8px;">
-        <span style="color: #e53e3e; font-weight: 500;">✗</span>
-        <span>${t('syncLocalOnly', '订阅链接、收藏节点仅在本地存储（保护隐私）')}</span>
+        <span>${t('allSettingsLocal', '所有设置仅在本地存储，不会跨设备同步')}</span>
       </div>
     </div>
   `;
@@ -933,12 +760,8 @@ async function saveSettings() {
     apiUrl = 'http://' + apiUrl;
   }
 
-  // 分离设置：只有 testUrl 存储在 local（因为可能很长）
-  const localSettings = {
-    ...(testUrl ? { testUrl } : {})  // 测速目标地址
-  };
-
-  const syncSettings = {
+  // 所有设置都存储在 local（不再使用 sync 同步）
+  const settings = {
     ...(apiUrl ? { apiUrl } : {}),
     ...(apiSecret ? { apiSecret } : {}),
     showNodeType,
@@ -949,32 +772,23 @@ async function saveSettings() {
     smartConnect,
     smartConnectKeywords,
     testConcurrency,
+    testUrl,
     language: currentLang
   };
 
-  // 同时保存到 local 和 sync（确保 local 总是最新的）
-  await chrome.storage.local.set({ syncSettings });
-
   try {
     // 获取旧设置，判断智能连接配置是否变化
-    const [syncResult, localResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['localSettings'])
-    ]);
-    const oldSyncSettings = syncResult.syncSettings || {};
-    const oldLocalSettings = localResult.localSettings || {};
+    const localResult = await chrome.storage.local.get(['settings']);
+    const oldSettings = localResult.settings || {};
 
-    const smartConnectChanged = oldSyncSettings.smartConnect !== syncSettings.smartConnect;
-    const keywordsChanged = oldSyncSettings.smartConnectKeywords !== syncSettings.smartConnectKeywords;
+    const smartConnectChanged = oldSettings.smartConnect !== settings.smartConnect;
+    const keywordsChanged = oldSettings.smartConnectKeywords !== settings.smartConnectKeywords;
 
-    // 分别保存到 sync 和 local
-    await Promise.all([
-      chrome.storage.sync.set({ syncSettings }),
-      chrome.storage.local.set({ localSettings })
-    ]);
+    // 保存到 local
+    await chrome.storage.local.set({ settings });
 
     // 合并设置用于通知 background.js
-    const mergedSettings = { ...localSettings, ...syncSettings };
+    const mergedSettings = settings;
 
     // 通知 background.js 重新加载配置
     chrome.runtime.sendMessage({
@@ -983,7 +797,7 @@ async function saveSettings() {
     });
 
     // 如果智能连接配置发生变化，且智能连接已启用，则重新触发智能连接
-    if ((smartConnectChanged || keywordsChanged) && syncSettings.smartConnect) {
+    if ((smartConnectChanged || keywordsChanged) && settings.smartConnect) {
       chrome.runtime.sendMessage({
         action: 'triggerSmartConnect'
       });
@@ -993,7 +807,7 @@ async function saveSettings() {
     showSaveStatus();
 
     // 应用深色模式
-    applyDarkMode(syncSettings.darkMode || false);
+    applyDarkMode(settings.darkMode || false);
   } catch (error) {
     console.error('保存失败:', error);
   } finally {
@@ -1100,9 +914,6 @@ async function clearAllData() {
   try {
     // 清除 chrome.storage.local 中的所有数据
     await chrome.storage.local.clear();
-
-    // 清除 chrome.storage.sync 中的所有数据
-    await chrome.storage.sync.clear();
 
     showToast(t('allDataCleared', '✓ 所有数据已清除'));
 
@@ -1315,10 +1126,9 @@ async function decryptDataWithPassword(encryptedBase64, password) {
 // 导出配置
 async function exportConfig() {
   try {
-    // 获取所有数据（包括 sync 和 local）
-    const [syncResult, localResult, subscriptionsResult, favoriteResult, languageResult] = await Promise.all([
-      chrome.storage.sync.get(['syncSettings']),
-      chrome.storage.local.get(['localSettings']),
+    // 获取所有数据（仅从 local）
+    const [settingsResult, subscriptionsResult, favoriteResult, languageResult] = await Promise.all([
+      chrome.storage.local.get(['settings']),
       chrome.storage.local.get(['subscriptions']),
       chrome.storage.local.get(['favoriteNodes']),
       chrome.storage.local.get(['language'])
@@ -1328,10 +1138,8 @@ async function exportConfig() {
       version: '1.0.0',
       exportDate: new Date().toISOString(),
       data: {
-        // 显示设置（开关、布局等）
-        syncSettings: syncResult.syncSettings || {},
-        // 敏感数据（API密钥、订阅链接）
-        localSettings: localResult.localSettings || {},
+        // 所有设置
+        settings: settingsResult.settings || {},
         // 订阅列表（包含完整URL）
         subscriptions: subscriptionsResult.subscriptions || [],
         // 收藏节点列表
@@ -1690,15 +1498,9 @@ async function importConfigData(config) {
     // 导入数据
     const updates = [];
 
-    // 导入显示设置（syncSettings）- 同时保存到 sync 和 local
-    if (config.data.syncSettings) {
-      updates.push(chrome.storage.sync.set({ syncSettings: config.data.syncSettings }));
-      updates.push(chrome.storage.local.set({ syncSettings: config.data.syncSettings }));
-    }
-
-    // 导入敏感数据（localSettings）
-    if (config.data.localSettings) {
-      updates.push(chrome.storage.local.set({ localSettings: config.data.localSettings }));
+    // 导入所有设置
+    if (config.data.settings) {
+      updates.push(chrome.storage.local.set({ settings: config.data.settings }));
     }
 
     // 导入订阅列表
